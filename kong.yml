@@ -1,0 +1,36 @@
+_format_version: "2.1"
+
+services:
+
+  - name: google
+    url: https://google.com
+    routes:
+      - name: google
+        paths:
+          - /g
+
+  - name: hi-api
+    url: http://host.docker.internal:3000/hi
+    routes:
+      - name: hello
+        paths:
+          - /hello
+    plugins:
+      - name: rate-limiting
+        config:
+          second: 5
+          policy: local
+          limit_by: ip
+
+  - name: bye-api
+    url: http://host.docker.internal:3000/bye
+    routes:
+      - name: goodbye
+        paths:
+          - /goodbye
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 5
+          policy: local
+          limit_by: ip
